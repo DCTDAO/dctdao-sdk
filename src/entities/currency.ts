@@ -16,10 +16,10 @@ export class Currency {
   /**
    * The only instance of the base class `Currency`.
    */
-  public static readonly BEAM: Currency = new Currency(18, 'MB', 'Moonbeam')
+  public static readonly GLIMMER: Currency = new Currency(18, 'GLMR', 'Glimmer')
 
   /**
-   * Constructs an instance of the base class `Currency`. The only instance of the base class `Currency` is `Currency.ETHER`.
+   * Constructs an instance of the base class `Currency`. The only instance of the base class `Currency` is `Currency.GLIMMER`.
    * @param decimals decimals of the currency
    * @param symbol symbol of the currency
    * @param name of the currency
@@ -33,5 +33,5 @@ export class Currency {
   }
 }
 
-const BEAM = Currency.BEAM
-export { BEAM }
+const GLIMMER = Currency.GLIMMER
+export { GLIMMER }
