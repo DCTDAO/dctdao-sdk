@@ -1,8 +1,8 @@
 import { ChainId, Token, Pair, TokenAmount, WGLMR, Price } from '../src'
 
 describe('Pair', () => {
-  const DCA = new Token(ChainId.MOONBEAM_TEST, '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24', 18, 'DCA', 'DCA Token')
-  const DCB = new Token(ChainId.MOONBEAM_TEST, '0xCfEB869F69431e42cdB54A4F4f105C19C080A601', 18, 'DCB', 'DCB Token')
+  const DCA = new Token(ChainId.MOONBEAM_TEST, '0x67B5656d60a809915323Bf2C40A8bEF15A152e3e', 18, 'DCA', 'DCA Token')
+  const DCB = new Token(ChainId.MOONBEAM_TEST, '0x9b1f7F645351AF3631a656421eD2e40f2802E6c0', 18, 'DCB', 'DCB Token')
   
   describe('constructor', () => {
     it('cannot be used for tokens on different chains', () => {
@@ -14,7 +14,7 @@ describe('Pair', () => {
   
   describe('#getAddress', () => {
     it('returns the correct address', () => {
-      expect(Pair.getAddress(DCA, DCB)).toEqual('0xEe10377A195FC858a8812f0048654D187F62F241')
+      expect(Pair.getAddress(DCA, DCB)).toEqual('0x09EC2cD6E784fAff4457f85C7Abf3097FA318B86')
     })
   })
 

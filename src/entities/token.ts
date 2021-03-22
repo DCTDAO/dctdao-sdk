@@ -64,5 +64,5 @@ export const WGLMR = {
     'WETH',
     'Wrapped Ether'
   ),
-  [ChainId.MOONBEAM_TEST]: new Token(ChainId.MOONBEAM_TEST,'0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab',18,'WGLMR','Wrapped Glimmer')
+  [ChainId.MOONBEAM_TEST]: new Token(ChainId.MOONBEAM_TEST,'0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66',18,'WGLMR','Wrapped Glimmer')
 }
