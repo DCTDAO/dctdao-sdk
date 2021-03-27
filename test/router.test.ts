@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant'
-import { ChainId, CurrencyAmount, GLIMMER, Pair, Percent, Route, Router, Token, TokenAmount, Trade, WGLMR } from '../src'
+import { ChainId, CurrencyAmount, BASE_CURRENCY, Pair, Percent, Route, Router, Token, TokenAmount, Trade, WRAPPED } from '../src'
 import JSBI from 'jsbi'
 
 function checkDeadline(deadline: string[] | string): void {
@@ -9,25 +9,27 @@ function checkDeadline(deadline: string[] | string): void {
   expect(new Date().getTime() / 1000 - parseInt(deadline)).toBeLessThanOrEqual(5)
 }
 
+const chainId = ChainId.MOONBEAM_TEST
+
 describe('Router', () => {
-  const token0 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000001', 18, 't0')
-  const token1 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000002', 18, 't1')
+  const token0 = new Token(chainId, '0x0000000000000000000000000000000000000001', 18, 't0')
+  const token1 = new Token(chainId, '0x0000000000000000000000000000000000000002', 18, 't1')
 
   const pair_0_1 = new Pair(new TokenAmount(token0, JSBI.BigInt(1000)), new TokenAmount(token1, JSBI.BigInt(1000)))
 
-  const pair_weth_0 = new Pair(new TokenAmount(WGLMR[ChainId.MAINNET], '1000'), new TokenAmount(token0, '1000'))
+  const pair_weth_0 = new Pair(new TokenAmount(WRAPPED[chainId], '1000'), new TokenAmount(token0, '1000'))
 
   describe('#swapCallParameters', () => {
     describe('exact in', () => {
       it('ether to token1', () => {
         const result = Router.swapCallParameters(
-          Trade.exactIn(new Route([pair_weth_0, pair_0_1], GLIMMER, token1), CurrencyAmount.ether(JSBI.BigInt(100))),
+          Trade.exactIn(new Route([pair_weth_0, pair_0_1], BASE_CURRENCY[chainId], token1), CurrencyAmount.base(chainId,JSBI.BigInt(100))),
           { ttl: 50, recipient: '0x0000000000000000000000000000000000000004', allowedSlippage: new Percent('1', '100') }
         )
         expect(result.methodName).toEqual('swapExactETHForTokens')
         expect(result.args.slice(0, -1)).toEqual([
           '0x51',
-          [WGLMR[ChainId.MAINNET].address, token0.address, token1.address],
+          [WRAPPED[chainId].address, token0.address, token1.address],
           '0x0000000000000000000000000000000000000004'
         ])
         expect(result.value).toEqual('0x64')
@@ -36,7 +38,7 @@ describe('Router', () => {
 
       it('deadline specified', () => {
         const result = Router.swapCallParameters(
-          Trade.exactIn(new Route([pair_weth_0, pair_0_1], GLIMMER, token1), CurrencyAmount.ether(JSBI.BigInt(100))),
+          Trade.exactIn(new Route([pair_weth_0, pair_0_1], BASE_CURRENCY[chainId], token1), CurrencyAmount.base(chainId, JSBI.BigInt(100))),
           {
             deadline: 50,
             recipient: '0x0000000000000000000000000000000000000004',
@@ -46,7 +48,7 @@ describe('Router', () => {
         expect(result.methodName).toEqual('swapExactETHForTokens')
         expect(result.args).toEqual([
           '0x51',
-          [WGLMR[ChainId.MAINNET].address, token0.address, token1.address],
+          [WRAPPED[chainId].address, token0.address, token1.address],
           '0x0000000000000000000000000000000000000004',
           '0x32'
         ])
@@ -55,14 +57,14 @@ describe('Router', () => {
 
       it('token1 to ether', () => {
         const result = Router.swapCallParameters(
-          Trade.exactIn(new Route([pair_0_1, pair_weth_0], token1, GLIMMER), new TokenAmount(token1, JSBI.BigInt(100))),
+          Trade.exactIn(new Route([pair_0_1, pair_weth_0], token1, BASE_CURRENCY[chainId]), new TokenAmount(token1, JSBI.BigInt(100))),
           { ttl: 50, recipient: '0x0000000000000000000000000000000000000004', allowedSlippage: new Percent('1', '100') }
         )
         expect(result.methodName).toEqual('swapExactTokensForETH')
         expect(result.args.slice(0, -1)).toEqual([
           '0x64',
           '0x51',
-          [token1.address, token0.address, WGLMR[ChainId.MAINNET].address],
+          [token1.address, token0.address, WRAPPED[chainId].address],
           '0x0000000000000000000000000000000000000004'
         ])
         expect(result.value).toEqual('0x0')
@@ -87,13 +89,13 @@ describe('Router', () => {
     describe('exact out', () => {
       it('ether to token1', () => {
         const result = Router.swapCallParameters(
-          Trade.exactOut(new Route([pair_weth_0, pair_0_1], GLIMMER, token1), new TokenAmount(token1, JSBI.BigInt(100))),
+          Trade.exactOut(new Route([pair_weth_0, pair_0_1], BASE_CURRENCY[chainId], token1), new TokenAmount(token1, JSBI.BigInt(100))),
           { ttl: 50, recipient: '0x0000000000000000000000000000000000000004', allowedSlippage: new Percent('1', '100') }
         )
         expect(result.methodName).toEqual('swapETHForExactTokens')
         expect(result.args.slice(0, -1)).toEqual([
           '0x64',
-          [WGLMR[ChainId.MAINNET].address, token0.address, token1.address],
+          [WRAPPED[chainId].address, token0.address, token1.address],
           '0x0000000000000000000000000000000000000004'
         ])
         expect(result.value).toEqual('0x80')
@@ -101,14 +103,14 @@ describe('Router', () => {
       })
       it('token1 to ether', () => {
         const result = Router.swapCallParameters(
-          Trade.exactOut(new Route([pair_0_1, pair_weth_0], token1, GLIMMER), CurrencyAmount.ether(JSBI.BigInt(100))),
+          Trade.exactOut(new Route([pair_0_1, pair_weth_0], token1, BASE_CURRENCY[chainId]), CurrencyAmount.base(chainId, JSBI.BigInt(100))),
           { ttl: 50, recipient: '0x0000000000000000000000000000000000000004', allowedSlippage: new Percent('1', '100') }
         )
         expect(result.methodName).toEqual('swapTokensForExactETH')
         expect(result.args.slice(0, -1)).toEqual([
           '0x64',
           '0x80',
-          [token1.address, token0.address, WGLMR[ChainId.MAINNET].address],
+          [token1.address, token0.address, WRAPPED[chainId].address],
           '0x0000000000000000000000000000000000000004'
         ])
         expect(result.value).toEqual('0x0')
@@ -134,7 +136,7 @@ describe('Router', () => {
       describe('exact in', () => {
         it('ether to token1', () => {
           const result = Router.swapCallParameters(
-            Trade.exactIn(new Route([pair_weth_0, pair_0_1], GLIMMER, token1), CurrencyAmount.ether(JSBI.BigInt(100))),
+            Trade.exactIn(new Route([pair_weth_0, pair_0_1], BASE_CURRENCY[chainId], token1), CurrencyAmount.base(chainId, JSBI.BigInt(100))),
             {
               ttl: 50,
               recipient: '0x0000000000000000000000000000000000000004',
@@ -145,7 +147,7 @@ describe('Router', () => {
           expect(result.methodName).toEqual('swapExactETHForTokensSupportingFeeOnTransferTokens')
           expect(result.args.slice(0, -1)).toEqual([
             '0x51',
-            [WGLMR[ChainId.MAINNET].address, token0.address, token1.address],
+            [WRAPPED[chainId].address, token0.address, token1.address],
             '0x0000000000000000000000000000000000000004'
           ])
           expect(result.value).toEqual('0x64')
@@ -153,7 +155,7 @@ describe('Router', () => {
         })
         it('token1 to ether', () => {
           const result = Router.swapCallParameters(
-            Trade.exactIn(new Route([pair_0_1, pair_weth_0], token1, GLIMMER), new TokenAmount(token1, JSBI.BigInt(100))),
+            Trade.exactIn(new Route([pair_0_1, pair_weth_0], token1, BASE_CURRENCY[chainId]), new TokenAmount(token1, JSBI.BigInt(100))),
             {
               ttl: 50,
               recipient: '0x0000000000000000000000000000000000000004',
@@ -165,7 +167,7 @@ describe('Router', () => {
           expect(result.args.slice(0, -1)).toEqual([
             '0x64',
             '0x51',
-            [token1.address, token0.address, WGLMR[ChainId.MAINNET].address],
+            [token1.address, token0.address, WRAPPED[chainId].address],
             '0x0000000000000000000000000000000000000004'
           ])
           expect(result.value).toEqual('0x0')
@@ -197,7 +199,7 @@ describe('Router', () => {
           expect(() =>
             Router.swapCallParameters(
               Trade.exactOut(
-                new Route([pair_weth_0, pair_0_1], GLIMMER, token1),
+                new Route([pair_weth_0, pair_0_1], BASE_CURRENCY[chainId], token1),
                 new TokenAmount(token1, JSBI.BigInt(100))
               ),
               {
@@ -212,7 +214,7 @@ describe('Router', () => {
         it('token1 to ether', () => {
           expect(() =>
             Router.swapCallParameters(
-              Trade.exactOut(new Route([pair_0_1, pair_weth_0], token1, GLIMMER), CurrencyAmount.ether(JSBI.BigInt(100))),
+              Trade.exactOut(new Route([pair_0_1, pair_weth_0], token1, BASE_CURRENCY[chainId]), CurrencyAmount.base(chainId, JSBI.BigInt(100))),
               {
                 ttl: 50,
                 recipient: '0x0000000000000000000000000000000000000004',

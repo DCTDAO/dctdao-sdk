@@ -1,9 +1,10 @@
-import { Token, WGLMR, ChainId, Pair, TokenAmount, Route, GLIMMER } from '../src'
+import { Token, WRAPPED, ChainId, Pair, TokenAmount, Route, BASE_CURRENCY } from '../src'
 
+const chainId = ChainId.MOONBEAM_TEST
 describe('Route', () => {
-  const token0 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000001', 18, 't0')
-  const token1 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000002', 18, 't1')
-  const weth = WGLMR[ChainId.MAINNET]
+  const token0 = new Token(chainId, '0x0000000000000000000000000000000000000001', 18, 't0')
+  const token1 = new Token(chainId, '0x0000000000000000000000000000000000000002', 18, 't1')
+  const weth = WRAPPED[chainId]
   const pair_0_1 = new Pair(new TokenAmount(token0, '100'), new TokenAmount(token1, '200'))
   const pair_0_weth = new Pair(new TokenAmount(token0, '100'), new TokenAmount(weth, '100'))
   const pair_1_weth = new Pair(new TokenAmount(token1, '175'), new TokenAmount(weth, '100'))
@@ -14,7 +15,7 @@ describe('Route', () => {
     expect(route.path).toEqual([token0, token1])
     expect(route.input).toEqual(token0)
     expect(route.output).toEqual(token1)
-    expect(route.chainId).toEqual(ChainId.MAINNET)
+    expect(route.chainId).toEqual(chainId)
   })
 
   it('can have a token as both input and output', () => {
@@ -25,16 +26,16 @@ describe('Route', () => {
   })
 
   it('supports ether input', () => {
-    const route = new Route([pair_0_weth], GLIMMER)
+    const route = new Route([pair_0_weth], BASE_CURRENCY[chainId])
     expect(route.pairs).toEqual([pair_0_weth])
-    expect(route.input).toEqual(GLIMMER)
+    expect(route.input).toEqual(BASE_CURRENCY[chainId])
     expect(route.output).toEqual(token0)
   })
 
   it('supports ether output', () => {
-    const route = new Route([pair_0_weth], token0, GLIMMER)
+    const route = new Route([pair_0_weth], token0, BASE_CURRENCY[chainId])
     expect(route.pairs).toEqual([pair_0_weth])
     expect(route.input).toEqual(token0)
-    expect(route.output).toEqual(GLIMMER)
+    expect(route.output).toEqual(BASE_CURRENCY[chainId])
   })
 })

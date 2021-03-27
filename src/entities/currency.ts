@@ -1,4 +1,5 @@
 import JSBI from 'jsbi'
+import { ChainId } from '../constants'
 
 import { SolidityType } from '../constants'
 import { validateSolidityTypeInstance } from '../utils'
@@ -16,10 +17,15 @@ export class Currency {
   /**
    * The only instance of the base class `Currency`.
    */
-  public static readonly GLIMMER: Currency = new Currency(18, 'GLMR', 'Glimmer')
+  //public static readonly BASE_CURRENCY: 
+  public static readonly BASE_CURRENCY = {
+    [ChainId.MAINNET]: new Currency(18, 'ETH', 'Ether'), 
+    [ChainId.MOONBEAM_TEST]: new Currency(18, 'GLMR', 'Glimmer'),
+    [ChainId.BINANCE_TEST]: new Currency(8, 'BNB', 'Binance Coin'),
+  }
 
   /**
-   * Constructs an instance of the base class `Currency`. The only instance of the base class `Currency` is `Currency.GLIMMER`.
+   * Constructs an instance of the base class `Currency`. The only instance of the base class `Currency` is `Currency.BASE_CURRENCY`.
    * @param decimals decimals of the currency
    * @param symbol symbol of the currency
    * @param name of the currency
@@ -33,5 +39,6 @@ export class Currency {
   }
 }
 
-const GLIMMER = Currency.GLIMMER
-export { GLIMMER }
+
+const BASE_CURRENCY = Currency.BASE_CURRENCY
+export { BASE_CURRENCY }

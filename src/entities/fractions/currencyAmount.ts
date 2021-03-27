@@ -1,11 +1,11 @@
 import { currencyEquals } from '../token'
-import { Currency, GLIMMER } from '../currency'
+import { Currency, BASE_CURRENCY } from '../currency'
 import invariant from 'tiny-invariant'
 import JSBI from 'jsbi'
 import _Big from 'big.js'
 import toFormat from 'toformat'
 
-import { BigintIsh, Rounding, TEN, SolidityType } from '../../constants'
+import { BigintIsh, Rounding, TEN, SolidityType, ChainId } from '../../constants'
 import { parseBigintIsh, validateSolidityTypeInstance } from '../../utils'
 import { Fraction } from './fraction'
 
@@ -15,11 +15,11 @@ export class CurrencyAmount extends Fraction {
   public readonly currency: Currency
 
   /**
-   * Helper that calls the constructor with the GLIMMER currency
+   * Helper that calls the constructor with the BASE_CURRENCY currency
    * @param amount ether amount in wei
    */
-  public static ether(amount: BigintIsh): CurrencyAmount {
-    return new CurrencyAmount(GLIMMER, amount)
+  public static base(chainId: ChainId, amount: BigintIsh): CurrencyAmount {
+    return new CurrencyAmount(BASE_CURRENCY[chainId], amount)
   }
 
   // amount _must_ be raw, i.e. in the native representation

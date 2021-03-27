@@ -56,7 +56,7 @@ export function currencyEquals(currencyA: Currency, currencyB: Currency): boolea
   }
 }
 
-export const WGLMR = {
+export const WRAPPED = {
   [ChainId.MAINNET]: new Token(
     ChainId.MAINNET,
     '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -65,5 +65,5 @@ export const WGLMR = {
     'Wrapped Ether'
   ),
   [ChainId.MOONBEAM_TEST]: new Token(ChainId.MOONBEAM_TEST,'0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66',18,'WGLMR','Wrapped Glimmer'),
-  [ChainId.BINANCE_TEST]: new Token(ChainId.BINANCE_TEST,'0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd', 18, 'WBNB','Wrapped BNB'),
+  [ChainId.BINANCE_TEST]: new Token(ChainId.BINANCE_TEST,'0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd', 8, 'WBNB','Wrapped BNB'),
 }

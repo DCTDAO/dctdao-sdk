@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant'
-import { ChainId, WGLMR as _WGLMR, TradeType, Rounding, Token, TokenAmount, Pair, Route, Trade } from '../src'
+import { ChainId, WRAPPED as _WRAPPED, TradeType, Rounding, Token, TokenAmount, Pair, Route, Trade } from '../src'
 
 const ADDRESSES = [
   '0x0000000000000000000000000000000000000001',
@@ -7,7 +7,7 @@ const ADDRESSES = [
   '0x0000000000000000000000000000000000000003'
 ]
 const CHAIN_ID = ChainId.MOONBEAM_TEST
-const WGLMR = _WGLMR[ChainId.MOONBEAM_TEST]
+const WRAPPED = _WRAPPED[ChainId.MOONBEAM_TEST]
 const DECIMAL_PERMUTATIONS: [number, number, number][] = [
   [0, 0, 0],
   [0, 9, 18],
@@ -44,7 +44,7 @@ describe('entities', () => {
           ),
           new Pair(
             new TokenAmount(tokens[2], decimalize(1, tokens[2].decimals)),
-            new TokenAmount(WGLMR, decimalize(1234, WGLMR.decimals))
+            new TokenAmount(WRAPPED, decimalize(1234, WRAPPED.decimals))
           )
         ]
       })
@@ -53,19 +53,19 @@ describe('entities', () => {
       it('Route', () => {
         route = new Route(pairs, tokens[0])
         expect(route.pairs).toEqual(pairs)
-        expect(route.path).toEqual(tokens.concat([WGLMR]))
+        expect(route.path).toEqual(tokens.concat([WRAPPED]))
         expect(route.input).toEqual(tokens[0])
-        expect(route.output).toEqual(WGLMR)
+        expect(route.output).toEqual(WRAPPED)
       })
 
       it('Price:Route.midPrice', () => {
         invariant(route.input instanceof Token)
         invariant(route.output instanceof Token)
-        expect(route.midPrice.quote(new TokenAmount(route.input, decimalize(1, route.input.decimals)))).toEqual(
+        expect(route.midPrice.quote(CHAIN_ID,new TokenAmount(route.input, decimalize(1, route.input.decimals)))).toEqual(
           new TokenAmount(route.output, decimalize(1234, route.output.decimals))
         )
         expect(
-          route.midPrice.invert().quote(new TokenAmount(route.output, decimalize(1234, route.output.decimals)))
+          route.midPrice.invert().quote(CHAIN_ID, new TokenAmount(route.output, decimalize(1234, route.output.decimals)))
         ).toEqual(new TokenAmount(route.input, decimalize(1, route.input.decimals)))
 
         expect(route.midPrice.toSignificant(1)).toEqual('1000')
@@ -104,13 +104,13 @@ describe('entities', () => {
             [
               new Pair(
                 new TokenAmount(tokens[1], decimalize(5, tokens[1].decimals)),
-                new TokenAmount(WGLMR, decimalize(10, WGLMR.decimals))
+                new TokenAmount(WRAPPED, decimalize(10, WRAPPED.decimals))
               )
             ],
             tokens[1]
           )
           const inputAmount = new TokenAmount(tokens[1], decimalize(1, tokens[1].decimals))
-          const expectedOutputAmount = new TokenAmount(WGLMR, '1662497915624478906')
+          const expectedOutputAmount = new TokenAmount(WRAPPED, '1662497915624478906')
           const trade = new Trade(route, inputAmount, TradeType.EXACT_INPUT)
           expect(trade.route).toEqual(route)
           expect(trade.tradeType).toEqual(TradeType.EXACT_INPUT)
@@ -119,8 +119,8 @@ describe('entities', () => {
 
           expect(trade.executionPrice.toSignificant(18)).toEqual('1.66249791562447891')
           expect(trade.executionPrice.invert().toSignificant(18)).toEqual('0.601504513540621866')
-          expect(trade.executionPrice.quote(inputAmount)).toEqual(expectedOutputAmount)
-          expect(trade.executionPrice.invert().quote(expectedOutputAmount)).toEqual(inputAmount)
+          expect(trade.executionPrice.quote(CHAIN_ID, inputAmount)).toEqual(expectedOutputAmount)
+          expect(trade.executionPrice.invert().quote(CHAIN_ID, expectedOutputAmount)).toEqual(inputAmount)
 
           expect(trade.nextMidPrice.toSignificant(18)).toEqual('1.38958368072925352')
           expect(trade.nextMidPrice.invert().toSignificant(18)).toEqual('0.71964')
@@ -129,7 +129,7 @@ describe('entities', () => {
         })
 
         it('TradeType.EXACT_OUTPUT', () => {
-          const outputAmount = new TokenAmount(WGLMR, '1662497915624478906')
+          const outputAmount = new TokenAmount(WRAPPED, '1662497915624478906')
           const expectedInputAmount = new TokenAmount(tokens[1], decimalize(1, tokens[1].decimals))
           const trade = new Trade(route, outputAmount, TradeType.EXACT_OUTPUT)
           expect(trade.route).toEqual(route)
@@ -139,8 +139,8 @@ describe('entities', () => {
 
           expect(trade.executionPrice.toSignificant(18)).toEqual('1.66249791562447891')
           expect(trade.executionPrice.invert().toSignificant(18)).toEqual('0.601504513540621866')
-          expect(trade.executionPrice.quote(expectedInputAmount)).toEqual(outputAmount)
-          expect(trade.executionPrice.invert().quote(outputAmount)).toEqual(expectedInputAmount)
+          expect(trade.executionPrice.quote(CHAIN_ID, expectedInputAmount)).toEqual(outputAmount)
+          expect(trade.executionPrice.invert().quote(CHAIN_ID, outputAmount)).toEqual(expectedInputAmount)
 
           expect(trade.nextMidPrice.toSignificant(18)).toEqual('1.38958368072925352')
           expect(trade.nextMidPrice.invert().toSignificant(18)).toEqual('0.71964')
@@ -155,8 +155,8 @@ describe('entities', () => {
                 new Pair(
                   new TokenAmount(tokens[1], decimalize(1, tokens[1].decimals)),
                   new TokenAmount(
-                    WGLMR,
-                    decimalize(10, WGLMR.decimals) +
+                    WRAPPED,
+                    decimalize(10, WRAPPED.decimals) +
                       (tokens[1].decimals === 9 ? BigInt('30090280812437312') : BigInt('30090270812437322'))
                   )
                 )
@@ -174,7 +174,7 @@ describe('entities', () => {
       })
 
       it('TokenAmount', () => {
-        const amount = new TokenAmount(WGLMR, '1234567000000000000000')
+        const amount = new TokenAmount(WRAPPED, '1234567000000000000000')
         expect(amount.toExact()).toEqual('1234.567')
         expect(amount.toExact({ groupSeparator: ',' })).toEqual('1,234.567')
       })

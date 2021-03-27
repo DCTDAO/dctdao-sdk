@@ -1,7 +1,7 @@
 import JSBI from 'jsbi'
 import {
   ChainId,
-  GLIMMER,
+  BASE_CURRENCY,
   CurrencyAmount,
   Pair,
   Percent,
@@ -10,14 +10,16 @@ import {
   TokenAmount,
   Trade,
   TradeType,
-  WGLMR
+  WRAPPED
 } from '../src'
 
+const chainId = ChainId.MOONBEAM_TEST
+
 describe('Trade', () => {
-  const token0 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000001', 18, 't0')
-  const token1 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000002', 18, 't1')
-  const token2 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000003', 18, 't2')
-  const token3 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000004', 18, 't3')
+  const token0 = new Token(chainId, '0x0000000000000000000000000000000000000001', 18, 't0')
+  const token1 = new Token(chainId, '0x0000000000000000000000000000000000000002', 18, 't1')
+  const token2 = new Token(chainId, '0x0000000000000000000000000000000000000003', 18, 't2')
+  const token3 = new Token(chainId, '0x0000000000000000000000000000000000000004', 18, 't3')
 
   const pair_0_1 = new Pair(new TokenAmount(token0, JSBI.BigInt(1000)), new TokenAmount(token1, JSBI.BigInt(1000)))
   const pair_0_2 = new Pair(new TokenAmount(token0, JSBI.BigInt(1000)), new TokenAmount(token2, JSBI.BigInt(1100)))
@@ -26,48 +28,48 @@ describe('Trade', () => {
   const pair_1_3 = new Pair(new TokenAmount(token1, JSBI.BigInt(1200)), new TokenAmount(token3, JSBI.BigInt(1300)))
 
   const pair_weth_0 = new Pair(
-    new TokenAmount(WGLMR[ChainId.MAINNET], JSBI.BigInt(1000)),
+    new TokenAmount(WRAPPED[chainId], JSBI.BigInt(1000)),
     new TokenAmount(token0, JSBI.BigInt(1000))
   )
 
   const empty_pair_0_1 = new Pair(new TokenAmount(token0, JSBI.BigInt(0)), new TokenAmount(token1, JSBI.BigInt(0)))
 
-  it('can be constructed with GLIMMER as input', () => {
+  it('can be constructed with BASE_CURRENCY as input', () => {
     const trade = new Trade(
-      new Route([pair_weth_0], GLIMMER),
-      CurrencyAmount.ether(JSBI.BigInt(100)),
+      new Route([pair_weth_0], BASE_CURRENCY[chainId]),
+      CurrencyAmount.base(chainId, JSBI.BigInt(100)),
       TradeType.EXACT_INPUT
     )
-    expect(trade.inputAmount.currency).toEqual(GLIMMER)
+    expect(trade.inputAmount.currency).toEqual(BASE_CURRENCY[chainId])
     expect(trade.outputAmount.currency).toEqual(token0)
   })
-  it('can be constructed with GLIMMER as input for exact output', () => {
+  it('can be constructed with BASE_CURRENCY as input for exact output', () => {
     const trade = new Trade(
-      new Route([pair_weth_0], GLIMMER, token0),
+      new Route([pair_weth_0], BASE_CURRENCY[chainId], token0),
       new TokenAmount(token0, JSBI.BigInt(100)),
       TradeType.EXACT_OUTPUT
     )
-    expect(trade.inputAmount.currency).toEqual(GLIMMER)
+    expect(trade.inputAmount.currency).toEqual(BASE_CURRENCY[chainId])
     expect(trade.outputAmount.currency).toEqual(token0)
   })
 
-  it('can be constructed with GLIMMER as output', () => {
+  it('can be constructed with BASE_CURRENCY[chainId] as output', () => {
     const trade = new Trade(
-      new Route([pair_weth_0], token0, GLIMMER),
-      CurrencyAmount.ether(JSBI.BigInt(100)),
+      new Route([pair_weth_0], token0, BASE_CURRENCY[chainId]),
+      CurrencyAmount.base(chainId, JSBI.BigInt(100)),
       TradeType.EXACT_OUTPUT
     )
     expect(trade.inputAmount.currency).toEqual(token0)
-    expect(trade.outputAmount.currency).toEqual(GLIMMER)
+    expect(trade.outputAmount.currency).toEqual(BASE_CURRENCY[chainId])
   })
-  it('can be constructed with GLIMMER as output for exact input', () => {
+  it('can be constructed with BASE_CURRENCY[chainId] as output for exact input', () => {
     const trade = new Trade(
-      new Route([pair_weth_0], token0, GLIMMER),
+      new Route([pair_weth_0], token0, BASE_CURRENCY[chainId]),
       new TokenAmount(token0, JSBI.BigInt(100)),
       TradeType.EXACT_INPUT
     )
     expect(trade.inputAmount.currency).toEqual(token0)
-    expect(trade.outputAmount.currency).toEqual(GLIMMER)
+    expect(trade.outputAmount.currency).toEqual(BASE_CURRENCY[chainId])
   })
 
   describe('#bestTradeExactIn', () => {
@@ -147,33 +149,33 @@ describe('Trade', () => {
       expect(result).toHaveLength(0)
     })
 
-    it('works for GLIMMER currency input', () => {
+    it('works for BASE_CURRENCY[chainId] currency input', () => {
       const result = Trade.bestTradeExactIn(
         [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
-        CurrencyAmount.ether(JSBI.BigInt(100)),
+        CurrencyAmount.base(chainId, JSBI.BigInt(100)),
         token3
       )
       expect(result).toHaveLength(2)
-      expect(result[0].inputAmount.currency).toEqual(GLIMMER)
-      expect(result[0].route.path).toEqual([WGLMR[ChainId.MAINNET], token0, token1, token3])
+      expect(result[0].inputAmount.currency).toEqual(BASE_CURRENCY[chainId])
+      expect(result[0].route.path).toEqual([WRAPPED[chainId], token0, token1, token3])
       expect(result[0].outputAmount.currency).toEqual(token3)
-      expect(result[1].inputAmount.currency).toEqual(GLIMMER)
-      expect(result[1].route.path).toEqual([WGLMR[ChainId.MAINNET], token0, token3])
+      expect(result[1].inputAmount.currency).toEqual(BASE_CURRENCY[chainId])
+      expect(result[1].route.path).toEqual([WRAPPED[chainId], token0, token3])
       expect(result[1].outputAmount.currency).toEqual(token3)
     })
-    it('works for GLIMMER currency output', () => {
+    it('works for BASE_CURRENCY[chainId] currency output', () => {
       const result = Trade.bestTradeExactIn(
         [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
         new TokenAmount(token3, JSBI.BigInt(100)),
-        GLIMMER
+        BASE_CURRENCY[chainId]
       )
       expect(result).toHaveLength(2)
       expect(result[0].inputAmount.currency).toEqual(token3)
-      expect(result[0].route.path).toEqual([token3, token0, WGLMR[ChainId.MAINNET]])
-      expect(result[0].outputAmount.currency).toEqual(GLIMMER)
+      expect(result[0].route.path).toEqual([token3, token0, WRAPPED[chainId]])
+      expect(result[0].outputAmount.currency).toEqual(BASE_CURRENCY[chainId])
       expect(result[1].inputAmount.currency).toEqual(token3)
-      expect(result[1].route.path).toEqual([token3, token1, token0, WGLMR[ChainId.MAINNET]])
-      expect(result[1].outputAmount.currency).toEqual(GLIMMER)
+      expect(result[1].route.path).toEqual([token3, token1, token0, WRAPPED[chainId]])
+      expect(result[1].outputAmount.currency).toEqual(BASE_CURRENCY[chainId])
     })
   })
 
@@ -185,21 +187,21 @@ describe('Trade', () => {
         TradeType.EXACT_INPUT
       )
       it('throws if less than 0', () => {
-        expect(() => exactIn.maximumAmountIn(new Percent(JSBI.BigInt(-1), JSBI.BigInt(100)))).toThrow(
+        expect(() => exactIn.maximumAmountIn(chainId, new Percent(JSBI.BigInt(-1), JSBI.BigInt(100)))).toThrow(
           'SLIPPAGE_TOLERANCE'
         )
       })
       it('returns exact if 0', () => {
-        expect(exactIn.maximumAmountIn(new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(exactIn.inputAmount)
+        expect(exactIn.maximumAmountIn(chainId, new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(exactIn.inputAmount)
       })
       it('returns exact if nonzero', () => {
-        expect(exactIn.maximumAmountIn(new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(
+        expect(exactIn.maximumAmountIn(chainId, new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token0, JSBI.BigInt(100))
         )
-        expect(exactIn.maximumAmountIn(new Percent(JSBI.BigInt(5), JSBI.BigInt(100)))).toEqual(
+        expect(exactIn.maximumAmountIn(chainId, new Percent(JSBI.BigInt(5), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token0, JSBI.BigInt(100))
         )
-        expect(exactIn.maximumAmountIn(new Percent(JSBI.BigInt(200), JSBI.BigInt(100)))).toEqual(
+        expect(exactIn.maximumAmountIn(chainId, new Percent(JSBI.BigInt(200), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token0, JSBI.BigInt(100))
         )
       })
@@ -212,21 +214,21 @@ describe('Trade', () => {
       )
 
       it('throws if less than 0', () => {
-        expect(() => exactOut.maximumAmountIn(new Percent(JSBI.BigInt(-1), JSBI.BigInt(100)))).toThrow(
+        expect(() => exactOut.maximumAmountIn(chainId, new Percent(JSBI.BigInt(-1), JSBI.BigInt(100)))).toThrow(
           'SLIPPAGE_TOLERANCE'
         )
       })
       it('returns exact if 0', () => {
-        expect(exactOut.maximumAmountIn(new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(exactOut.inputAmount)
+        expect(exactOut.maximumAmountIn(chainId, new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(exactOut.inputAmount)
       })
       it('returns slippage amount if nonzero', () => {
-        expect(exactOut.maximumAmountIn(new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(
+        expect(exactOut.maximumAmountIn(chainId, new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token0, JSBI.BigInt(156))
         )
-        expect(exactOut.maximumAmountIn(new Percent(JSBI.BigInt(5), JSBI.BigInt(100)))).toEqual(
+        expect(exactOut.maximumAmountIn(chainId, new Percent(JSBI.BigInt(5), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token0, JSBI.BigInt(163))
         )
-        expect(exactOut.maximumAmountIn(new Percent(JSBI.BigInt(200), JSBI.BigInt(100)))).toEqual(
+        expect(exactOut.maximumAmountIn(chainId, new Percent(JSBI.BigInt(200), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token0, JSBI.BigInt(468))
         )
       })
@@ -241,21 +243,21 @@ describe('Trade', () => {
         TradeType.EXACT_INPUT
       )
       it('throws if less than 0', () => {
-        expect(() => exactIn.minimumAmountOut(new Percent(JSBI.BigInt(-1), JSBI.BigInt(100)))).toThrow(
+        expect(() => exactIn.minimumAmountOut(chainId, new Percent(JSBI.BigInt(-1), JSBI.BigInt(100)))).toThrow(
           'SLIPPAGE_TOLERANCE'
         )
       })
       it('returns exact if 0', () => {
-        expect(exactIn.minimumAmountOut(new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(exactIn.outputAmount)
+        expect(exactIn.minimumAmountOut(chainId, new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(exactIn.outputAmount)
       })
       it('returns exact if nonzero', () => {
-        expect(exactIn.minimumAmountOut(new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(
+        expect(exactIn.minimumAmountOut(chainId, new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token2, JSBI.BigInt(69))
         )
-        expect(exactIn.minimumAmountOut(new Percent(JSBI.BigInt(5), JSBI.BigInt(100)))).toEqual(
+        expect(exactIn.minimumAmountOut(chainId, new Percent(JSBI.BigInt(5), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token2, JSBI.BigInt(65))
         )
-        expect(exactIn.minimumAmountOut(new Percent(JSBI.BigInt(200), JSBI.BigInt(100)))).toEqual(
+        expect(exactIn.minimumAmountOut(chainId, new Percent(JSBI.BigInt(200), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token2, JSBI.BigInt(23))
         )
       })
@@ -268,21 +270,21 @@ describe('Trade', () => {
       )
 
       it('throws if less than 0', () => {
-        expect(() => exactOut.minimumAmountOut(new Percent(JSBI.BigInt(-1), JSBI.BigInt(100)))).toThrow(
+        expect(() => exactOut.minimumAmountOut(chainId, new Percent(JSBI.BigInt(-1), JSBI.BigInt(100)))).toThrow(
           'SLIPPAGE_TOLERANCE'
         )
       })
       it('returns exact if 0', () => {
-        expect(exactOut.minimumAmountOut(new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(exactOut.outputAmount)
+        expect(exactOut.minimumAmountOut(chainId, new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(exactOut.outputAmount)
       })
       it('returns slippage amount if nonzero', () => {
-        expect(exactOut.minimumAmountOut(new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(
+        expect(exactOut.minimumAmountOut(chainId, new Percent(JSBI.BigInt(0), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token2, JSBI.BigInt(100))
         )
-        expect(exactOut.minimumAmountOut(new Percent(JSBI.BigInt(5), JSBI.BigInt(100)))).toEqual(
+        expect(exactOut.minimumAmountOut(chainId, new Percent(JSBI.BigInt(5), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token2, JSBI.BigInt(100))
         )
-        expect(exactOut.minimumAmountOut(new Percent(JSBI.BigInt(200), JSBI.BigInt(100)))).toEqual(
+        expect(exactOut.minimumAmountOut(chainId, new Percent(JSBI.BigInt(200), JSBI.BigInt(100)))).toEqual(
           new TokenAmount(token2, JSBI.BigInt(100))
         )
       })
@@ -372,33 +374,33 @@ describe('Trade', () => {
       expect(result).toHaveLength(0)
     })
 
-    it('works for GLIMMER currency input', () => {
+    it('works for BASE_CURRENCY[chainId] currency input', () => {
       const result = Trade.bestTradeExactOut(
         [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
-        GLIMMER,
+        BASE_CURRENCY[chainId],
         new TokenAmount(token3, JSBI.BigInt(100))
       )
       expect(result).toHaveLength(2)
-      expect(result[0].inputAmount.currency).toEqual(GLIMMER)
-      expect(result[0].route.path).toEqual([WGLMR[ChainId.MAINNET], token0, token1, token3])
+      expect(result[0].inputAmount.currency).toEqual(BASE_CURRENCY[chainId])
+      expect(result[0].route.path).toEqual([WRAPPED[chainId], token0, token1, token3])
       expect(result[0].outputAmount.currency).toEqual(token3)
-      expect(result[1].inputAmount.currency).toEqual(GLIMMER)
-      expect(result[1].route.path).toEqual([WGLMR[ChainId.MAINNET], token0, token3])
+      expect(result[1].inputAmount.currency).toEqual(BASE_CURRENCY[chainId])
+      expect(result[1].route.path).toEqual([WRAPPED[chainId], token0, token3])
       expect(result[1].outputAmount.currency).toEqual(token3)
     })
-    it('works for GLIMMER currency output', () => {
+    it('works for BASE_CURRENCY[chainId] currency output', () => {
       const result = Trade.bestTradeExactOut(
         [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
         token3,
-        CurrencyAmount.ether(JSBI.BigInt(100))
+        CurrencyAmount.base(chainId,JSBI.BigInt(100))
       )
       expect(result).toHaveLength(2)
       expect(result[0].inputAmount.currency).toEqual(token3)
-      expect(result[0].route.path).toEqual([token3, token0, WGLMR[ChainId.MAINNET]])
-      expect(result[0].outputAmount.currency).toEqual(GLIMMER)
+      expect(result[0].route.path).toEqual([token3, token0, WRAPPED[chainId]])
+      expect(result[0].outputAmount.currency).toEqual(BASE_CURRENCY[chainId])
       expect(result[1].inputAmount.currency).toEqual(token3)
-      expect(result[1].route.path).toEqual([token3, token1, token0, WGLMR[ChainId.MAINNET]])
-      expect(result[1].outputAmount.currency).toEqual(GLIMMER)
+      expect(result[1].route.path).toEqual([token3, token1, token0, WRAPPED[chainId]])
+      expect(result[1].outputAmount.currency).toEqual(BASE_CURRENCY[chainId])
     })
   })
 })

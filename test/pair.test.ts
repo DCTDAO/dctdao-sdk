@@ -1,4 +1,4 @@
-import { ChainId, Token, Pair, TokenAmount, WGLMR, Price } from '../src'
+import { ChainId, Token, Pair, TokenAmount, WRAPPED, Price } from '../src'
 
 describe('Pair', () => {
   const DCA = new Token(ChainId.MOONBEAM_TEST, '0x67B5656d60a809915323Bf2C40A8bEF15A152e3e', 18, 'DCA', 'DCA Token')
@@ -6,7 +6,7 @@ describe('Pair', () => {
   
   describe('constructor', () => {
     it('cannot be used for tokens on different chains', () => {
-      expect(() => new Pair(new TokenAmount(DCA, '100'), new TokenAmount(WGLMR[ChainId.MAINNET], '100'))).toThrow(
+      expect(() => new Pair(new TokenAmount(DCA, '100'), new TokenAmount(WRAPPED[ChainId.MAINNET], '100'))).toThrow(
         'CHAIN_IDS'
       )
     })
@@ -81,7 +81,7 @@ describe('Pair', () => {
     })
 
     it('throws if invalid token', () => {
-      expect(() => pair.priceOf(WGLMR[ChainId.MOONBEAM_TEST])).toThrow('TOKEN')
+      expect(() => pair.priceOf(WRAPPED[ChainId.MOONBEAM_TEST])).toThrow('TOKEN')
     })
   })
 
@@ -97,7 +97,7 @@ describe('Pair', () => {
 
     it('throws if not in the pair', () => {
       expect(() =>
-        new Pair(new TokenAmount(DCA, '101'), new TokenAmount(DCB, '100')).reserveOf(WGLMR[ChainId.MOONBEAM_TEST])
+        new Pair(new TokenAmount(DCA, '101'), new TokenAmount(DCB, '100')).reserveOf(WRAPPED[ChainId.MOONBEAM_TEST])
       ).toThrow('TOKEN')
     })
   })
@@ -112,7 +112,7 @@ describe('Pair', () => {
     expect(new Pair(new TokenAmount(DCB, '100'), new TokenAmount(DCA, '100')).involvesToken(DCB)).toEqual(true)
     expect(new Pair(new TokenAmount(DCB, '100'), new TokenAmount(DCA, '100')).involvesToken(DCA)).toEqual(true)
     expect(
-      new Pair(new TokenAmount(DCB, '100'), new TokenAmount(DCA, '100')).involvesToken(WGLMR[ChainId.MOONBEAM_TEST])
+      new Pair(new TokenAmount(DCB, '100'), new TokenAmount(DCA, '100')).involvesToken(WRAPPED[ChainId.MOONBEAM_TEST])
     ).toEqual(false)
   })
 
