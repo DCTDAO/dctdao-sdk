@@ -7,12 +7,10 @@ import { Currency } from './currency'
  * Represents an ERC20 token with a unique address and some metadata.
  */
 export class Token extends Currency {
-  public readonly chainId: ChainId
   public readonly address: string
 
-  public constructor(chainId: ChainId, address: string, decimals: number, symbol?: string, name?: string) {
-    super(decimals, symbol, name)
-    this.chainId = chainId
+  public constructor(chainId: ChainId, address: string, decimals: number, symbol: string, name: string) {
+    super(chainId, decimals, symbol, name)
     this.address = validateAndParseAddress(address)
   }
 
@@ -64,6 +62,12 @@ export const WRAPPED = {
     'WETH',
     'Wrapped Ether'
   ),
-  [ChainId.MOONBEAM_TEST]: new Token(ChainId.MOONBEAM_TEST,'0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66',18,'WGLMR','Wrapped Glimmer'),
-  [ChainId.BINANCE_TEST]: new Token(ChainId.BINANCE_TEST,'0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd', 8, 'WBNB','Wrapped BNB'),
+  [ChainId.MOONBEAM_TEST]: new Token(
+    ChainId.MOONBEAM_TEST,
+    '0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66', 
+    18,
+    'WGLMR',
+    'Wrapped Glimmer'
+    ),
+  [ChainId.BINANCE_TEST]: new Token(ChainId.BINANCE_TEST,'0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd', 8, 'WBNB','Wrappeed BNB'),
 }
