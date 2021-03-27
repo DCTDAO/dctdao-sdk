@@ -1,7 +1,7 @@
 {
   "name": "@dctdao/sdk",
   "license": "MIT",
-  "version": "0.9.9-beta7",
+  "version": "0.9.9-beta8",
   "description": "🛠 An SDK for building applications on top of DCTDAO.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
