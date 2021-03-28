@@ -4,6 +4,9 @@ describe('Pair', () => {
   const DCA = new Token(ChainId.MOONBEAM_TEST, '0x67B5656d60a809915323Bf2C40A8bEF15A152e3e', 18, 'DCA', 'DCA Token')
   const DCB = new Token(ChainId.MOONBEAM_TEST, '0x9b1f7F645351AF3631a656421eD2e40f2802E6c0', 18, 'DCB', 'DCB Token')
   
+  const DCA_B = new Token(ChainId.BINANCE_TEST, '0x3Cc7B9a386410858B412B00B13264654F68364Ed', 18, 'DCA', 'DCA Token')
+  const DCB_B = new Token(ChainId.BINANCE_TEST, '0xAe5057BB185fC820219e21bC7382c0DE7A42fE86', 18, 'DCB', 'DCB Token')
+
   describe('constructor', () => {
     it('cannot be used for tokens on different chains', () => {
       expect(() => new Pair(new TokenAmount(DCA, '100'), new TokenAmount(WRAPPED[ChainId.MAINNET], '100'))).toThrow(
@@ -15,6 +18,7 @@ describe('Pair', () => {
   describe('#getAddress', () => {
     it('returns the correct address', () => {
       expect(Pair.getAddress(DCA, DCB)).toEqual('0x09EC2cD6E784fAff4457f85C7Abf3097FA318B86')
+      expect(Pair.getAddress(DCA_B, DCB_B)).toEqual('0x8F877FaD5d8314352C55DD8EE6915E0af547d11a')
     })
   })
 
