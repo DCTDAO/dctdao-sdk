@@ -62,6 +62,13 @@ export const WRAPPED = {
     'WETH',
     'Wrapped Ether'
   ),
+  [ChainId.ROPSTEN]: new Token(
+    ChainId.ROPSTEN,
+    '0x02d4418C5eeb5BeF366272018F7cD498179FE98B',
+    18,
+    'WETH',
+    'Wrapped Ether'
+  ),
   [ChainId.MOONBEAM_TEST]: new Token(
     ChainId.MOONBEAM_TEST,
     '0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66', 

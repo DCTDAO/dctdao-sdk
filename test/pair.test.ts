@@ -7,6 +7,9 @@ describe('Pair', () => {
   const DCA_B = new Token(ChainId.BINANCE_TEST, '0x3Cc7B9a386410858B412B00B13264654F68364Ed', 18, 'DCA', 'DCA Token')
   const DCB_B = new Token(ChainId.BINANCE_TEST, '0xAe5057BB185fC820219e21bC7382c0DE7A42fE86', 18, 'DCB', 'DCB Token')
 
+  const DCA_R = new Token(ChainId.ROPSTEN, '0xB4B6D45d4706BBd93bb0e14e517B81453db0468C', 18, 'DCA', 'DCA Token')
+  const DCB_R = new Token(ChainId.ROPSTEN, '0x2fE357d6F828777c36209973227a75cB8afe7626', 18, 'DCB', 'DCB Token')
+
   describe('constructor', () => {
     it('cannot be used for tokens on different chains', () => {
       expect(() => new Pair(new TokenAmount(DCA, '100'), new TokenAmount(WRAPPED[ChainId.MAINNET], '100'))).toThrow(
@@ -18,7 +21,8 @@ describe('Pair', () => {
   describe('#getAddress', () => {
     it('returns the correct address', () => {
       expect(Pair.getAddress(DCA, DCB)).toEqual('0x09EC2cD6E784fAff4457f85C7Abf3097FA318B86')
-      expect(Pair.getAddress(DCA_B, DCB_B)).toEqual('0x8F877FaD5d8314352C55DD8EE6915E0af547d11a')
+      expect(Pair.getAddress(DCA_B, DCB_B)).toEqual('0x6a6Ab599ceA8979dda3c18B27767FA88C56fbeAa')
+      expect(Pair.getAddress(DCA_R, DCB_R)).toEqual('0x8297d5Fb258a00f0B642CB7dc09F0F4dC0DbDe4f')
     })
   })
 

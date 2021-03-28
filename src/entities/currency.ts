@@ -21,6 +21,7 @@ export class Currency {
   //public static readonly BASE_CURRENCY: 
   public static readonly BASE_CURRENCY = {
     [ChainId.MAINNET]: new Currency(ChainId.MAINNET, 18, 'ETH', 'Ether'), 
+    [ChainId.ROPSTEN]: new Currency(ChainId.ROPSTEN, 18, 'ETH', 'Ether'),
     [ChainId.MOONBEAM_TEST]: new Currency(ChainId.MOONBEAM_TEST, 18, 'GLMR', 'Glimmer'),
     [ChainId.BINANCE_TEST]: new Currency(ChainId.BINANCE_TEST, 18,'BNB', 'Binance Coin'),
   }
