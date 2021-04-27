@@ -23,7 +23,7 @@ describe('entities', () => {
     describe(`decimals permutation: ${decimals}`, () => {
       let tokens: Token[]
       it('Token', () => {
-        tokens = ADDRESSES.map((address, i) => new Token(CHAIN_ID, address, decimals[i]))
+        tokens = ADDRESSES.map((address, i) => new Token(CHAIN_ID, address, decimals[i],decimals[i].toString(), decimals[i].toString()))
         tokens.forEach((token, i) => {
           expect(token.chainId).toEqual(CHAIN_ID)
           expect(token.address).toEqual(ADDRESSES[i])

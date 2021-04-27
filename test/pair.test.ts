@@ -10,6 +10,10 @@ describe('Pair', () => {
   const DCA_R = new Token(ChainId.ROPSTEN, '0xB4B6D45d4706BBd93bb0e14e517B81453db0468C', 18, 'DCA', 'DCA Token')
   const DCB_R = new Token(ChainId.ROPSTEN, '0x2fE357d6F828777c36209973227a75cB8afe7626', 18, 'DCB', 'DCB Token')
 
+  const DCA_O = new Token(ChainId.ROPSTEN, '0x9b1f7F645351AF3631a656421eD2e40f2802E6c0', 18, 'DCA', 'DCA Token')
+  const DCB_O = new Token(ChainId.ROPSTEN, '0x67B5656d60a809915323Bf2C40A8bEF15A152e3e', 18, 'DCB', 'DCB Token')
+
+
   describe('constructor', () => {
     it('cannot be used for tokens on different chains', () => {
       expect(() => new Pair(new TokenAmount(DCA, '100'), new TokenAmount(WRAPPED[ChainId.MAINNET], '100'))).toThrow(
@@ -23,6 +27,7 @@ describe('Pair', () => {
       expect(Pair.getAddress(DCA, DCB)).toEqual('0x09EC2cD6E784fAff4457f85C7Abf3097FA318B86')
       expect(Pair.getAddress(DCA_B, DCB_B)).toEqual('0x6a6Ab599ceA8979dda3c18B27767FA88C56fbeAa')
       expect(Pair.getAddress(DCA_R, DCB_R)).toEqual('0x8297d5Fb258a00f0B642CB7dc09F0F4dC0DbDe4f')
+      expect(Pair.getAddress(DCA_O, DCB_O)).toEqual('0x09EC2cD6E784fAff4457f85C7Abf3097FA318B86')
     })
   })
 

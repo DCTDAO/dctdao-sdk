@@ -2,8 +2,8 @@ import { Token, WRAPPED, ChainId, Pair, TokenAmount, Route, BASE_CURRENCY } from
 
 const chainId = ChainId.MOONBEAM_TEST
 describe('Route', () => {
-  const token0 = new Token(chainId, '0x0000000000000000000000000000000000000001', 18, 't0')
-  const token1 = new Token(chainId, '0x0000000000000000000000000000000000000002', 18, 't1')
+  const token0 = new Token(chainId, '0x0000000000000000000000000000000000000001', 18, 't0','t0')
+  const token1 = new Token(chainId, '0x0000000000000000000000000000000000000002', 18, 't1','t1')
   const weth = WRAPPED[chainId]
   const pair_0_1 = new Pair(new TokenAmount(token0, '100'), new TokenAmount(token1, '200'))
   const pair_0_weth = new Pair(new TokenAmount(token0, '100'), new TokenAmount(weth, '100'))

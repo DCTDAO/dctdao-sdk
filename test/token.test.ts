@@ -6,27 +6,27 @@ describe('Token', () => {
 
   describe('#equals', () => {
     it('fails if address differs', () => {
-      expect(new Token(ChainId.MAINNET, ADDRESS_ONE, 18).equals(new Token(ChainId.MAINNET, ADDRESS_TWO, 18))).toBe(
+      expect(new Token(ChainId.MAINNET, ADDRESS_ONE, 18,'t0','to').equals(new Token(ChainId.MAINNET, ADDRESS_TWO, 18,'t0','to'))).toBe(
         false
       )
     })
 
     it('false if chain id differs', () => {
-      expect(new Token(ChainId.MOONBEAM_TEST, ADDRESS_ONE, 18).equals(new Token(ChainId.MAINNET, ADDRESS_ONE, 18))).toBe(
+      expect(new Token(ChainId.MOONBEAM_TEST, ADDRESS_ONE, 18,'t0','to').equals(new Token(ChainId.MAINNET, ADDRESS_ONE, 18,'t0','to'))).toBe(
         false
       )
     })
 
     it('true if only decimals differs', () => {
-      expect(new Token(ChainId.MAINNET, ADDRESS_ONE, 9).equals(new Token(ChainId.MAINNET, ADDRESS_ONE, 18))).toBe(true)
+      expect(new Token(ChainId.MAINNET, ADDRESS_ONE, 9,'t0','to').equals(new Token(ChainId.MAINNET, ADDRESS_ONE, 18,'t0','to'))).toBe(true)
     })
 
     it('true if address is the same', () => {
-      expect(new Token(ChainId.MAINNET, ADDRESS_ONE, 18).equals(new Token(ChainId.MAINNET, ADDRESS_ONE, 18))).toBe(true)
+      expect(new Token(ChainId.MAINNET, ADDRESS_ONE, 18,'t0','to').equals(new Token(ChainId.MAINNET, ADDRESS_ONE, 18,'t0','to'))).toBe(true)
     })
 
     it('true on reference equality', () => {
-      const token = new Token(ChainId.MAINNET, ADDRESS_ONE, 18)
+      const token = new Token(ChainId.MAINNET, ADDRESS_ONE, 18,'t0','to')
       expect(token.equals(token)).toBe(true)
     })
 

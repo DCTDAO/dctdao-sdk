@@ -35,9 +35,9 @@ export abstract class Fetcher {
   public static async fetchTokenData(
     chainId: ChainId,
     address: string,
-    provider = getDefaultProvider(getNetwork(chainId)),
-    symbol?: string,
-    name?: string
+    symbol: string,
+    name: string,
+    provider = getDefaultProvider(getNetwork(chainId)), 
   ): Promise<Token> {
     const parsedDecimals =
       typeof TOKEN_DECIMALS_CACHE?.[chainId]?.[address] === 'number'

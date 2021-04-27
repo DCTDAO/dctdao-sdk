@@ -14,6 +14,7 @@ export class Token extends Currency {
     this.address = validateAndParseAddress(address)
   }
 
+
   /**
    * Returns true if the two tokens are equivalent, i.e. have the same chainId and address.
    * @param other other token to compare
@@ -76,5 +77,16 @@ export const WRAPPED = {
     'WGLMR',
     'Wrapped Glimmer'
     ),
-  [ChainId.BINANCE_TEST]: new Token(ChainId.BINANCE_TEST,'0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd', 8, 'WBNB','Wrappeed BNB'),
+  [ChainId.BINANCE_TEST]: new Token(
+    ChainId.BINANCE_TEST,
+    '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
+     18, 
+     'WBNB',
+     'Wrappeed BNB'),
+  [ChainId.OPERA_TEST]: new Token(
+    ChainId.OPERA_TEST,
+    '0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66', 
+    18,
+    'WFTM',
+    'Wrapped Fantom'),
 }

@@ -24,6 +24,7 @@ export class Currency {
     [ChainId.ROPSTEN]: new Currency(ChainId.ROPSTEN, 18, 'ETH', 'Ether'),
     [ChainId.MOONBEAM_TEST]: new Currency(ChainId.MOONBEAM_TEST, 18, 'GLMR', 'Glimmer'),
     [ChainId.BINANCE_TEST]: new Currency(ChainId.BINANCE_TEST, 18,'BNB', 'Binance Coin'),
+    [ChainId.OPERA_TEST]: new Currency(ChainId.OPERA_TEST, 18, 'FTM', 'Fantom'),
   }
 
   /**
