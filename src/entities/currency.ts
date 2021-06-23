@@ -25,6 +25,8 @@ export class Currency {
     [ChainId.MOONBEAM_TEST]: new Currency(ChainId.MOONBEAM_TEST, 18, 'GLMR', 'Glimmer'),
     [ChainId.BINANCE_TEST]: new Currency(ChainId.BINANCE_TEST, 18,'BNB', 'Binance Coin'),
     [ChainId.OPERA_TEST]: new Currency(ChainId.OPERA_TEST, 18, 'FTM', 'Fantom'),
+    [ChainId.AVAX_TEST]: new Currency(ChainId.AVAX_TEST, 18, 'AVAX','Avalanche'),
+    [ChainId.AVAX]: new Currency(ChainId.AVAX, 18, 'AVAX','Avalanche')
   }
 
   /**

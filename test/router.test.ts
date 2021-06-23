@@ -26,7 +26,7 @@ describe('Router', () => {
           Trade.exactIn(new Route([pair_weth_0, pair_0_1], BASE_CURRENCY[chainId], token1), CurrencyAmount.base(chainId,JSBI.BigInt(100))),
           { ttl: 50, recipient: '0x0000000000000000000000000000000000000004', allowedSlippage: new Percent('1', '100') }
         )
-        expect(result.methodName).toEqual('swapExactETHForTokens')
+        expect(result.methodName).toEqual('swapExactNATIVEForTokens')
         expect(result.args.slice(0, -1)).toEqual([
           '0x51',
           [WRAPPED[chainId].address, token0.address, token1.address],
@@ -45,7 +45,7 @@ describe('Router', () => {
             allowedSlippage: new Percent('1', '100')
           }
         )
-        expect(result.methodName).toEqual('swapExactETHForTokens')
+        expect(result.methodName).toEqual('swapExactNATIVEForTokens')
         expect(result.args).toEqual([
           '0x51',
           [WRAPPED[chainId].address, token0.address, token1.address],
@@ -60,7 +60,7 @@ describe('Router', () => {
           Trade.exactIn(new Route([pair_0_1, pair_weth_0], token1, BASE_CURRENCY[chainId]), new TokenAmount(token1, JSBI.BigInt(100))),
           { ttl: 50, recipient: '0x0000000000000000000000000000000000000004', allowedSlippage: new Percent('1', '100') }
         )
-        expect(result.methodName).toEqual('swapExactTokensForETH')
+        expect(result.methodName).toEqual('swapExactTokensForNATIVE')
         expect(result.args.slice(0, -1)).toEqual([
           '0x64',
           '0x51',
@@ -92,7 +92,7 @@ describe('Router', () => {
           Trade.exactOut(new Route([pair_weth_0, pair_0_1], BASE_CURRENCY[chainId], token1), new TokenAmount(token1, JSBI.BigInt(100))),
           { ttl: 50, recipient: '0x0000000000000000000000000000000000000004', allowedSlippage: new Percent('1', '100') }
         )
-        expect(result.methodName).toEqual('swapETHForExactTokens')
+        expect(result.methodName).toEqual('swapNATIVEForExactTokens')
         expect(result.args.slice(0, -1)).toEqual([
           '0x64',
           [WRAPPED[chainId].address, token0.address, token1.address],
@@ -106,7 +106,7 @@ describe('Router', () => {
           Trade.exactOut(new Route([pair_0_1, pair_weth_0], token1, BASE_CURRENCY[chainId]), CurrencyAmount.base(chainId, JSBI.BigInt(100))),
           { ttl: 50, recipient: '0x0000000000000000000000000000000000000004', allowedSlippage: new Percent('1', '100') }
         )
-        expect(result.methodName).toEqual('swapTokensForExactETH')
+        expect(result.methodName).toEqual('swapTokensForExactNATIVE')
         expect(result.args.slice(0, -1)).toEqual([
           '0x64',
           '0x80',
@@ -144,7 +144,7 @@ describe('Router', () => {
               feeOnTransfer: true
             }
           )
-          expect(result.methodName).toEqual('swapExactETHForTokensSupportingFeeOnTransferTokens')
+          expect(result.methodName).toEqual('swapExactNATIVEForTokensSupportingFeeOnTransferTokens')
           expect(result.args.slice(0, -1)).toEqual([
             '0x51',
             [WRAPPED[chainId].address, token0.address, token1.address],
@@ -163,7 +163,7 @@ describe('Router', () => {
               feeOnTransfer: true
             }
           )
-          expect(result.methodName).toEqual('swapExactTokensForETHSupportingFeeOnTransferTokens')
+          expect(result.methodName).toEqual('swapExactTokensForNATIVESupportingFeeOnTransferTokens')
           expect(result.args.slice(0, -1)).toEqual([
             '0x64',
             '0x51',

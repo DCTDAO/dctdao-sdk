@@ -65,7 +65,7 @@ export const WRAPPED = {
   ),
   [ChainId.ROPSTEN]: new Token(
     ChainId.ROPSTEN,
-    '0x02d4418C5eeb5BeF366272018F7cD498179FE98B',
+    '0xb603cea165119701b58d56d10d2060fbfb3efad8',
     18,
     'WETH',
     'Wrapped Ether'
@@ -89,4 +89,18 @@ export const WRAPPED = {
     18,
     'WFTM',
     'Wrapped Fantom'),
+  [ChainId.AVAX_TEST]: new Token(
+    ChainId.AVAX_TEST,
+    '0xd00ae08403B9bbb9124bB305C09058E32C39A48c',
+    18,
+    'WAVAX',
+    'Wrapped Avax'
+  ),
+  [ChainId.AVAX]: new Token(
+    ChainId.AVAX,
+    '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7',
+    18,
+    'WAVAX',
+    'Wrapped Avax'
+  )
 }
