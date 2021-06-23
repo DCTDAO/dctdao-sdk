@@ -18,7 +18,7 @@
   "module": "dist/sdk.esm.js",
   "scripts": {
     "lint": "tsdx lint src test",
-    "build": "tsdx build",
+    "build": "tsdx build && cp -r ./abi ./dist/abi",
     "start": "tsdx watch",
     "test": "tsdx test",
     "prepublishOnly": "tsdx build"
